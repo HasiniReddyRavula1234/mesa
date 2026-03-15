@@ -3,6 +3,69 @@
 ---
 title: Release History
 ---
+# 3.5.1 (2026-03-15)
+## Highlights
+Mesa 3.5.1 is a maintenance release that backports bug fixes, performance improvements, and minor enhancements from the Mesa 4.0 development branch to the stable 3.5.x series.
+
+The event scheduling system stabilized in 3.5.0 receives several enhancements: `EventGenerator` gains `pause()`/`resume()` methods (#3431) and a `next_scheduled_time` property (#3423). `EventList` adds a `compact()` method for cleaning up cancelled events (#3359). Monotonic time is now enforced in event scheduling (#3343), and a memory leak from strong references in `EventGenerator` is fixed (#3360).
+
+Performance is improved for `Event.__lt__` (#3336), `EventList.peek_ahead` (#3413), and `EventList.__len__` (#3512), which all avoid unnecessary allocations.
+
+Bug fixes include inconsistent state when assigning a `CellAgent` to a full cell (#3374), atomic agent addition in `FixedCell` (#3415), time rewind prevention (#3329), and removal of legacy `model.steps` usage from `solara_viz` (#3344).
+
+Finally, tooltip support is added to the Altair visualization backend (#3392). Type hints are improved across the event system and `AgentSet`. Benchmarks are updated to use `Scenario`, and the Wolf-Sheep example is optimized (#3503).
+
+## What's Changed
+### 🛠 Enhancements
+* Fix Schedule validation for start > end by @souro26 in #3326
+* Event fixes by @quaquel in #3331
+* Fail fast on unsupported lambda/partial callbacks in schedule_event by @falloficarus22 in #3320
+* fix: use weakref in EventGenerator to prevent memory leak by @Krishsharma179 in #3360
+* Add compaction method to EventList to reduce performance degradation under heavy cancellation by @souro26 in #3359
+* Add type hints to internal generator in AgentSet.select by @Tushar1733 in #3410
+* Add tooltip support to Altair backend by @annapurna-gupta in #3392
+* add next_scheduled_time property to EventGenerator by @souro26 in #3423
+* add pause and resume to EventGenerator by @souro26 in #3431
+
+### 🐛 Bugs fixed
+* Fix unbounded growth of `Model._event_generators` by @EwoutH in #3317
+* fix: prevent time rewind in _advance_time by adding early return by @Krishsharma179 in #3329
+* Remove `model.steps` usage from solara_viz by @codebreaker32 in #3344
+* Enforce monotonic time invariant in event scheduling by @souro26 in #3343
+* Fix inconsistent state when assigning CellAgent to full cell by @souro26 in #3374
+* fix: FixedCell setter atomically adds agent before updating reference (fixes #3411) by @Rishav23av in #3415
+* Cell capacity bugfix by @quaquel in #3524
+
+### ⚡ Performance improvements
+* Optimize `Event.__lt__` to avoid tuple allocation by @souro26 in #3336
+* Use generator in peek_ahead instead of list allocation by @souro26 in #3413
+* avoid temporary list allocation in EventList.__len__ by @souro26 in #3512
+
+### 🔍 Examples updated
+* Clean up pd_grid example activation logic by @EwoutH in #3349
+* Use scenario for all examples in benchmarks by @codebreaker32 in #3314
+* Optimise Wolf-sheep performance by @PietroMondini in #3503
+
+### 📜 Documentation improvements
+* Add AgentSet to docs by @EwoutH in #3316
+* Improve type annotations in mesa.time.event by @Tushar1733 in #3419
+* docs: clarify proposal-first contribution flow and update PR/issue templates by @wang-boyu in #3395
+
+### 🔧 Maintenance
+* Remove additional lines of code used for testing by @codebreaker32 in #3335
+* Add tests for execution ordering and cancellation invariants for EventList by @souro26 in #3353
+* Fix benchmark workflow permissions for fork PRs by @EwoutH in #3459
+
+## New Contributors
+* @Krishsharma179 made their first contribution in #3329
+* @Tushar1733 made their first contribution in #3410
+* @annapurna-gupta made their first contribution in #3392
+* @Rishav23av made their first contribution in #3415
+* @PietroMondini made their first contribution in #3503
+* @m-y-mo made their first contribution
+
+**Full Changelog**: https://github.com/mesa/mesa/compare/v3.5.0...v3.5.1
+
 # 3.5.0 (2026-02-15)
 ## Highlights
 Mesa 3.5.0 is a major feature release that introduces a public event scheduling API, stabilizes the event system, and lays the groundwork for Mesa 4.0 by deprecating several legacy patterns.
